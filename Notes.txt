@@ -1,0 +1,29 @@
+Have the decision of what thrusters to use be determined by the center of mass (closest child to the center of mass)
+
+default
+mass: 2
+drag: 1
+angular drag: 1
+freeze position: z
+freeze rotation: x, y
+
+thruster determination: (handled in local position)
+turn left:
+i.y > y && facing left
+i.y < y && facing right
+i.y > y && i.x < x && facing down
+i.y < y && i.x > x && facing up
+turn right:
+i.y > y && facing right
+i.y < y && facing left
+i.y > y && i.x > x && facing down
+i.y < y && i.x < x && facing up
+move forward:
+facing forward 
+move backward:
+facing backward
+
+Max ship rotation y = 26.5
+
+Camera
+

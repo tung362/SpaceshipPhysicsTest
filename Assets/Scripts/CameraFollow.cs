@@ -41,8 +41,22 @@ public class CameraFollow : MonoBehaviour
 
     void MouseLook()
     {
+        float MouseYMovement = -Input.GetAxis("Mouse Y");
+        Debug.Log(Vector3.Dot(transform.forward, Vector3.up));
+        //Debug.Log(MouseYMovement);
+        //Restrict Top Movement
+        if(Vector3.Dot(transform.forward, Vector3.forward) <= -0.3)
+        {
+            if (MouseYMovement < 0) MouseYMovement = 0;
+        }
+        //Restrict Bottom Movement
+        //if (Vector3.Dot(transform.forward, Vector3.up) < 0)
+        //{
+        //    if (MouseYMovement > 0) MouseYMovement = 0;
+        //}
+
         transform.RotateAround(new Vector3(Player.transform.position.x, Player.transform.position.y, Player.transform.position.z), new Vector3(0, 0, 1), -Input.GetAxis("Mouse X") * 2);
-        transform.Rotate(new Vector3(-Input.GetAxis("Mouse Y"), 0, 0) * 2);
+        transform.Rotate(new Vector3(MouseYMovement, 0, 0) * 2);
     }
 
     void MouseZoom()
@@ -62,15 +76,12 @@ public class CameraFollow : MonoBehaviour
         }
 
         float normalizedMouseZ = (newMouseZ - ZoomMin) / (ZoomMax - ZoomMin);
-        Vector3 playerDirection = (transform.position - Player.transform.position).normalized;
+        Vector3 playerDirection = ((transform.position - transform.forward) - Player.transform.position).normalized;
 
-        if(playerDirection.x == 0 && playerDirection.y == 0 && newMouseZ != normalizedMouseZ)
-        {
-            playerDirection = -Player.transform.up;
-        }
-
-        Debug.Log("MOO: " + normalizedMouseZ);
-        Debug.Log("X: " + playerDirection.x + "Y: " + playerDirection.y);
+        //if(playerDirection.x == 0 && playerDirection.y == 0 && newMouseZ != 0)
+        //{
+        //    playerDirection = -transform.forward;
+        //}
 
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(Player.transform.position.x + (playerDirection.x * ZoomForward * normalizedMouseZ), Player.transform.position.y + (playerDirection.y * ZoomForward * normalizedMouseZ), newMouseZ), ScrollSpeed * Time.deltaTime);
     }
